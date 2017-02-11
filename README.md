@@ -1,2 +1,2 @@
 # android-images
-docker images for AOS developers
+Yet another repo with docker images for Android developers
