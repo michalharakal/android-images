@@ -6,4 +6,7 @@ WORKDIR "/tmp"
 
 RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION}
 
+ENV CI "yes"
 
+RUN mkdir -p /src
+WORKDIR /src
