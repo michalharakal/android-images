@@ -1,4 +1,4 @@
-FROM android/ndk
+FROM android/ndk:11
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		automake \
