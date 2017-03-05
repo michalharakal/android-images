@@ -1,0 +1,4 @@
+= Docker image for compiling VLC for Android =
+== Run ==
+
+  docker run -it -v $PWD:/opt/workspace -v $PWD/.gradle:/root/.gradle android/vlc /bin/bash $@
