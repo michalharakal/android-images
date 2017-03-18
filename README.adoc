@@ -1,0 +1,29 @@
+# android-images
+Yet another repo with docker images for Android developers
+
+[source,planzuml]
+------
+node "java jdk-8" as jdk8
+node "java jdk-7" as jdk7
+artifact "Android" {
+node "gradle" as gradle
+node "sdk" as sdk
+node "ndk 11" as ndk11
+node "ndk 13" as ndk13
+node "vlc" as vlc
+}
+artifact "Tools" {
+node "ruby" as ruby
+node "Asciidoctor" as asciidoctor
+}
+
+gradle -up-> jdk8 
+sdk -up-> gradle
+ndk11 -up-> sdk
+ndk13 -up-> sdk
+vlc -up-> ndk11
+
+
+ruby -up-> jdk8 
+asciidoctor -up-> ruby
+------
