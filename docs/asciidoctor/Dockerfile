@@ -1,45 +1,37 @@
-FROM fedora
+FROM android/ruby
 
-MAINTAINER Guillaume Scheibel <guillaume.scheibel@gmail.com>
+ENV DEBIAN_FRONTEND noninteractive
 
-ENV JAVA_HOME /jdk1.8.0_20
 ENV PATH $PATH:$JAVA_HOME/bin:/fopub/bin
 ENV BACKENDS /asciidoctor-backends
 ENV GVM_AUTO_ANSWER true
-ENV ASCIIDOCTOR_VERSION "1.5.4"
+ENV ASCIIDOCTOR_VERSION "1.5.5"
 
-RUN dnf install -y tar \
-    make \
-    gcc \
-    ruby \
-    ruby-devel \
-    rubygems \
-    graphviz \
-    rubygem-nokogiri \
-    unzip \
-    findutils \
-    which \
-    wget \
-    python-devel \
-    zlib-devel \
-    libjpeg-devel \
-    redhat-rpm-config \
-    patch \
-  && dnf clean packages \
-  && (curl -s -k -L -C - -b "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz | tar xfz -) \
-  && mkdir /fopub \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		python-setuptools \
+        python-dev \
+	&& rm -rf /var/lib/apt/lists/*
+
+
+
+# Install dependencies
+RUN  mkdir /fopub \
   && curl -L https://api.github.com/repos/asciidoctor/asciidoctor-fopub/tarball | tar xzf - -C /fopub/ --strip-components=1 \
-  && touch empty.xml \
-  && fopub empty.xml \
-  && rm empty.xml \
+  && touch /tmp/empty.xml \
+  && fopub /tmp/empty.xml \
+  && rm /tmp/empty.xml \
   && gem install --no-ri --no-rdoc asciidoctor --version $ASCIIDOCTOR_VERSION \
   && gem install --no-ri --no-rdoc asciidoctor-diagram \
   && gem install --no-ri --no-rdoc asciidoctor-epub3 --version 1.5.0.alpha.6 \
-  && gem install --no-ri --no-rdoc asciidoctor-pdf --version 1.5.0.alpha.11 \
+  && gem install --no-ri --no-rdoc rake \
+  && gem install --no-ri --no-rdoc epubcheck --version 3.0.1 \
+  && gem install --no-ri --no-rdoc kindlegen --version 3.0.1 \
+  && gem install --no-ri --no-rdoc asciidoctor-pdf --version 1.5.0.alpha.13 \
   && gem install --no-ri --no-rdoc asciidoctor-confluence \
-  && gem install --no-ri --no-rdoc coderay pygments.rb thread_safe epubcheck kindlegen \
+  && gem install --no-ri --no-rdoc rouge coderay pygments.rb thread_safe epubcheck kindlegen \
   && gem install --no-ri --no-rdoc slim \
   && gem install --no-ri --no-rdoc haml tilt \
+  && gem install --no-ri --no-rdoc asciidoctor-revealjs \
   && mkdir $BACKENDS \
   && (curl -LkSs https://api.github.com/repos/asciidoctor/asciidoctor-backends/tarball | tar xfz - -C $BACKENDS --strip-components=1) \
   && wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python \
