@@ -10,6 +10,8 @@ ENV ASCIIDOCTOR_VERSION "1.5.5"
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		python-setuptools \
         python-dev \
+        zip \
+        unzip \
 	&& rm -rf /var/lib/apt/lists/*
 
 
@@ -34,7 +36,7 @@ RUN  mkdir /fopub \
   && gem install --no-ri --no-rdoc asciidoctor-revealjs \
   && mkdir $BACKENDS \
   && (curl -LkSs https://api.github.com/repos/asciidoctor/asciidoctor-backends/tarball | tar xfz - -C $BACKENDS --strip-components=1) \
-  && wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python \
+  && wget https://bitbucket.org/pypa/setuptools/downloads/ez_setup.py -O - | python \
   && easy_install "blockdiag[pdf]" \
   && easy_install seqdiag \
   && easy_install actdiag \
