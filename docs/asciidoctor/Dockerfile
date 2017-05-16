@@ -1,23 +1,34 @@
-FROM android/ruby
+FROM fedora
 
-ENV DEBIAN_FRONTEND noninteractive
+MAINTAINER Guillaume Scheibel <guillaume.scheibel@gmail.com>
 
+ENV JAVA_HOME /jdk1.8.0_112
 ENV PATH $PATH:$JAVA_HOME/bin:/fopub/bin
 ENV BACKENDS /asciidoctor-backends
 ENV GVM_AUTO_ANSWER true
 ENV ASCIIDOCTOR_VERSION "1.5.5"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		python-setuptools \
-        python-dev \
-        zip \
-        unzip \
-	&& rm -rf /var/lib/apt/lists/*
-
-
-
-# Install dependencies
-RUN  mkdir /fopub \
+RUN dnf install -y tar \
+    make \
+    gcc \
+    ruby \
+    ruby-devel \
+    rubygems \
+    graphviz \
+    rubygem-nokogiri \
+    unzip \
+    findutils \
+    which \
+    wget \
+    python-devel \
+    zlib-devel \
+    libjpeg-devel \
+    redhat-rpm-config \
+    patch \
+    sudo \
+  && dnf clean packages \
+  && (curl -s -k -L -C - -b "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz | tar xfz -) \
+  && mkdir /fopub \
   && curl -L https://api.github.com/repos/asciidoctor/asciidoctor-fopub/tarball | tar xzf - -C /fopub/ --strip-components=1 \
   && touch /tmp/empty.xml \
   && fopub /tmp/empty.xml \
@@ -28,7 +39,7 @@ RUN  mkdir /fopub \
   && gem install --no-ri --no-rdoc rake \
   && gem install --no-ri --no-rdoc epubcheck --version 3.0.1 \
   && gem install --no-ri --no-rdoc kindlegen --version 3.0.1 \
-  && gem install --no-ri --no-rdoc asciidoctor-pdf --version 1.5.0.alpha.13 \
+  && gem install --no-ri --no-rdoc asciidoctor-pdf --version 1.5.0.alpha.15 \
   && gem install --no-ri --no-rdoc asciidoctor-confluence \
   && gem install --no-ri --no-rdoc rouge coderay pygments.rb thread_safe epubcheck kindlegen \
   && gem install --no-ri --no-rdoc slim \
@@ -36,7 +47,7 @@ RUN  mkdir /fopub \
   && gem install --no-ri --no-rdoc asciidoctor-revealjs \
   && mkdir $BACKENDS \
   && (curl -LkSs https://api.github.com/repos/asciidoctor/asciidoctor-backends/tarball | tar xfz - -C $BACKENDS --strip-components=1) \
-  && wget https://bitbucket.org/pypa/setuptools/downloads/ez_setup.py -O - | python \
+  && wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python \
   && easy_install "blockdiag[pdf]" \
   && easy_install seqdiag \
   && easy_install actdiag \
