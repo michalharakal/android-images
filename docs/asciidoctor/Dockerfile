@@ -25,6 +25,8 @@ RUN dnf install -y tar \
     libjpeg-devel \
     redhat-rpm-config \
     patch \
+    git \
+    pandoc \
     sudo \
   && dnf clean packages \
   && (curl -s -k -L -C - -b "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz | tar xfz -) \
@@ -56,6 +58,12 @@ RUN dnf install -y tar \
   && /bin/bash -c "source /root/.sdkman/bin/sdkman-init.sh" \
   && /bin/bash -c "echo sdkman_auto_answer=true > ~/.sdkman/etc/config" \
   && /bin/bash -c -l "sdk install lazybones"
+  
+RUN git clone https://github.com/asciidoctor/asciidoctor-deck.js /deckjs \
+    && mv /deckjs/* /asciidoctor-backends/haml/deckjs
+  
+COPY themes/ /pdf-themes/android/
+COPY fonts/RobotoTTF/  /pdf-fonts/
 
 WORKDIR /documents
 VOLUME /documents

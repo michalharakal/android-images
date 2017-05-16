@@ -1,0 +1,34 @@
+= Asciidoctor
+
+
+* image based on official _asciidoctor_ docker image based on _fedora_ with 
+* contains updated asciidoctor-pdf --version 1.5.0.alpha.15
+* default styling uses Roboto TTF 
+
+== Build
+
+
+-----
+docker build -t android/asciidoctor .
+-----
+
+== Usage
+
+..bash_profile
+-----
+function asciidoctor() {
+  docker run -it  -v $PWD:/documents/ android/asciidoctor asciidoctor -r asciidoctor-diagram $@
+}
+
+function asciidoctorSlides() {
+  docker run -it  -v $PWD:/documents/ android/asciidoctor asciidoctor -r asciidoctor-diagram  -T /asciidoctor-backends/haml/deckjs/templates/haml $@
+}
+
+function asciidoctorpdf () {
+    docker run -it -v $PWD:/documents/ android/asciidoctor asciidoctor-pdf -a pdf-fontsdir=/pdf-fonts -a pdf-style=/pdf-themes/android/android-theme.yml -r asciidoctor-diagram  -a sectids -a pdf-page-size=A4  $@
+}
+
+export -f asciidoctor
+export -f asciidoctorpdf
+export -f asciidoctorSlides
+-----
