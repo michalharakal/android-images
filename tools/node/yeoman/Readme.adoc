@@ -1,0 +1,19 @@
+= Yeoman
+
+Tempaltes generator
+
+
+.build
+----
+docker build -t my/yeoman .
+----
+
+.bash
+----
+function yo () {
+  docker run -it -v $PWD:/src -u yeoman my/yeoman yo $@
+}
+export -f yo
+----
+
+NOTE: yeoman can't run as root.
