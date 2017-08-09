@@ -1,0 +1,11 @@
+= Docker for newman
+
+based on https://github.com/postmanlabs/newman-docker
+
+.run collection form local file
+----
+docker run -v ~/collections:/etc/newman -t postman/newman_ubuntu1404 \
+    run "HTTPBinNewmanTest.json.postman_collection" \
+    --environment="HTTPBinNewmanTestEnv.json.postman_environment" \
+    --reporters="html,cli" --reporter-html-export="newman-results.html"
+----
