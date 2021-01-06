@@ -1,7 +1,7 @@
 # android-images
 Yet another repo with docker images for Android developers
 
-[source,planzuml]
+[source,plantuml]
 ------
 node "java jdk-8" as jdk8
 node "java jdk-7" as jdk7
