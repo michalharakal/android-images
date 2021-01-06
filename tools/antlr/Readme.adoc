@@ -1,0 +1,18 @@
+= ANTLR Docker 
+
+== Update source code
+
+Make sure, that nested submodule with antlr source code has been downloaded. (Its hack until DOcker became a part of antlr, see https://github.com/antlr/antlr4/pull/2810) 
+
+    git submodule update --init --recursive
+
+== Build
+
+    docker build -t mh/antlr .
+
+== Run
+
+Since this is a transparent call of docker image from commandline, wehre a new files are generated, it is a good idea to root in docker as a host user, not as a root.
+
+
+  docker run -it -u $(id -u ${USER}):$(id -g ${USER}) -v `pwd`:/work mh/antlr  JSON.g4
