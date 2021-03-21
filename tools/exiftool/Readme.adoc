@@ -1,0 +1,14 @@
+= Exiftool Docker container on Alpine Linux
+
+
+== Build
+
+    docker build -t exiftool .
+
+== Run
+
+    alias exiftool='docker run -it -v $(pwd):/work mh/exiftool  exiftool $@'
+
+== Remove meta informations from all picture
+
+   exiftool  -all= *
